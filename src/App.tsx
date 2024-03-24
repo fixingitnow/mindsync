@@ -5,8 +5,8 @@ import TaskEntry from './components/TaskEntry';
 
 function App() {
   return (
-    <div className="flex bg-blue-600">
-      <TaskEntry text="Calling from App"></TaskEntry>
+    <div className='bg-black'>
+      <TaskEntry />
     </div>
   );
 }
