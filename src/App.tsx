@@ -5,10 +5,8 @@ import TaskEntry from './components/TaskEntry';
 
 function App() {
   return (
-    <div className="App">
-      <section className="App-header">
-        <TaskEntry text="Calling from App"></TaskEntry>
-      </section>
+    <div className="flex bg-blue-600">
+      <TaskEntry text="Calling from App"></TaskEntry>
     </div>
   );
 }

@@ -6,9 +6,12 @@ const TaskEntry = (props: propsType) => {
     const { text } = props
 
     return (
-        <div>
-            {text}
-        </div>
+        <form className="bg-red">
+            <label>
+                <input type="text" />
+                {text}
+            </label>
+        </form>
     )
 }
 
