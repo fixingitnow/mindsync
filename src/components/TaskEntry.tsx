@@ -14,8 +14,8 @@ const getSessionID = () => {
     return sessionID
 }
 
-const serverURL = 'http://localhost:8787'
-// const serverURL = "https://my-worker.pradeepsai-aseblr.workers.dev/"
+// const serverURL = 'http://localhost:8787'
+const serverURL = "https://my-worker.pradeepsai-aseblr.workers.dev/"
 
 const TaskEntry = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
