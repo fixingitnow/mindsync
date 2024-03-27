@@ -20,6 +20,13 @@ const worker = {
 				}
 				await env.DB1.put(sessionid, JSON.stringify({ taskname, taskdescription, taskDuration }));
 				return new Response('Task Created', { status: 200 });
+			} else if (request.method === 'DELETE') {
+				const { sessionid, taskname } = await request.json();
+				if (!sessionid || !taskname) {
+					return new Response('Invalid request', { status: 400 });
+				}
+				await env.DB1.delete(sessionid);
+				return new Response('Task Deleted', { status: 200 });
 			} else {
 				return new Response('Method not allowed', { status: 405 });
 			}
