@@ -8,24 +8,43 @@ const worker = {
 				// Read the sessionid from the request
 				const sessionid = url.pathname.split('/').pop();
 
-				const value = await env.DB1.get(sessionid);
-				if (value === null) {
-					return new Response('Task not found', { status: 404 });
+				const tasks = await env.DB1.get(sessionid);
+				if (tasks === null) {
+					return new Response('Session not found', { status: 404 });
 				}
-				return new Response(`${value}`, { status: 200 });
+				return new Response(`${tasks}`, { status: 200 });
 			} else if (request.method === 'POST') {
 				const { sessionid, taskname, taskdescription, taskDuration } = await request.json();
 				if (!sessionid || !taskname || !taskdescription || !taskDuration) {
 					return new Response('Invalid request', { status: 400 });
 				}
-				await env.DB1.put(sessionid, JSON.stringify({ taskname, taskdescription, taskDuration }));
+
+				let tasks = await env.DB1.get(sessionid);
+				if (tasks === null) {
+					tasks = [];
+				} else {
+					tasks = JSON.parse(tasks);
+				}
+
+				tasks.push({ taskname, taskdescription, taskDuration });
+				await env.DB1.put(sessionid, JSON.stringify(tasks));
+
 				return new Response('Task Created', { status: 200 });
 			} else if (request.method === 'DELETE') {
 				const { sessionid, taskname } = await request.json();
 				if (!sessionid || !taskname) {
 					return new Response('Invalid request', { status: 400 });
 				}
-				await env.DB1.delete(sessionid);
+
+				let tasks = await env.DB1.get(sessionid);
+				if (tasks === null) {
+					return new Response('Session not found', { status: 404 });
+				}
+
+				tasks = JSON.parse(tasks);
+				const updatedTasks = tasks.filter((task) => task.taskname !== taskname);
+				await env.DB1.put(sessionid, JSON.stringify(updatedTasks));
+
 				return new Response('Task Deleted', { status: 200 });
 			} else {
 				return new Response('Method not allowed', { status: 405 });
