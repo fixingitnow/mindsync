@@ -82,7 +82,6 @@ const TaskEntry = () => {
                     throw new Error('Failed to fetch tasks');
                 }
                 const data = await response.json();
-                console.log(data, 'data client')
                 if (data && data.length > 0) {
                     const mappedTasks = data.map((task: any) => ({
                         entry: task.taskdescription,
@@ -100,8 +99,7 @@ const TaskEntry = () => {
         fetchTasks();
     }, [sessionID]);
 
-    // use supsense for fallback ui
-    console.log(sessionID, 'log')
+    // TODO: use supsense for fallback ui
     return (
         <div className="flex justify-center items-center h-screen">
             <form className="bg-blue-300 p-4 rounded-md shadow-md mr-4" onSubmit={handleSubmit}>

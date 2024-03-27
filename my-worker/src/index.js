@@ -4,6 +4,7 @@ const worker = {
 			'Access-Control-Allow-Origin': '*',
 			'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
 			'Access-Control-Max-Age': '86400',
+			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 		};
 		try {
 			if (request.method === 'GET') {
@@ -16,7 +17,6 @@ const worker = {
 				if (tasks === null) {
 					return new Response('Session not found', { status: 404, headers: corsHeaders });
 				}
-				console.log(tasks, 'tasks server');
 				return new Response(`${tasks}`, { status: 200, headers: corsHeaders });
 			} else if (request.method === 'POST') {
 				// POST request: Create a new task for a session
@@ -58,6 +58,9 @@ const worker = {
 				await env.DB1.put(sessionid, JSON.stringify(updatedTasks));
 
 				return new Response('Task Deleted', { status: 200, headers: corsHeaders });
+			} else if (request.method === 'OPTIONS') {
+				// Respond to preflight requests with a 200 OK status
+				return new Response(null, { status: 200, headers: corsHeaders });
 			} else {
 				// Unsupported request method
 				return new Response('Method not allowed', { status: 405, headers: corsHeaders });
