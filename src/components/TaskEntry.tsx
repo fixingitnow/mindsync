@@ -69,6 +69,30 @@ const TaskEntry = () => {
         }
     };
 
+    const onDelete = async (task: Task) => {
+        console.log('calling dete')
+        // Make HTTP request to Cloudflare Worker to delete the task from KV
+        try {
+            const response = await fetch(`${serverURL}/tasks`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sessionid: sessionID,
+                    taskname: task.entry,
+                }),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to delete task');
+            }
+            // Update local state by removing the task
+            setTasks(tasks.filter((t) => t.entry !== task.entry));
+        } catch (error) {
+            console.error('Error deleting task:', error);
+        }
+    }
+
     useEffect(() => {
         setSessionID(getSessionID)
     }, [])
@@ -124,7 +148,7 @@ const TaskEntry = () => {
             </form>
             <div className="flex flex-col">
                 {tasks.map((task, index) => (
-                    <TaskView key={index} task={task} />
+                    <TaskView key={index} task={task} onDelete={onDelete} />
                 ))}
             </div>
         </div>

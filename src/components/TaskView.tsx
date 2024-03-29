@@ -4,9 +4,10 @@ import { Task } from './TaskEntry';
 // Specify the type of the props object explicitly
 type TaskViewProps = {
     task: Task;
+    onDelete: Function;
 };
 
-const TaskView: React.FC<TaskViewProps> = ({ task }) => {
+const TaskView: React.FC<TaskViewProps> = ({ task, onDelete }) => {
     const { entry, duration } = task;
 
     return (
@@ -14,6 +15,7 @@ const TaskView: React.FC<TaskViewProps> = ({ task }) => {
             <h2 className="text-lg font-semibold mb-2">Task Details:</h2>
             <p><strong>Task Entry:</strong> {entry}</p>
             <p><strong>Duration:</strong> {duration} minutes</p>
+            <button onClick={() => onDelete(task)}>Delete</button>
         </div>
     );
 };
