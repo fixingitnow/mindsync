@@ -2,7 +2,7 @@ const worker = {
 	async fetch(request, env, ctx) {
 		const corsHeaders = {
 			'Access-Control-Allow-Origin': '*',
-			'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
+			'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS,DELETE',
 			'Access-Control-Max-Age': '86400',
 			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 		};
@@ -13,6 +13,9 @@ const worker = {
 				// Returns: Response with tasks for the session or "Session not found" if sessionid is invalid
 				const url = new URL(request.url);
 				const sessionid = url.pathname.split('/').pop();
+				if (!sessionid) {
+					return new Response('Hello 🌊 pass in session id to make it work', { status: 404, headers: corsHeaders });
+				}
 				const tasks = await env.DB1.get(sessionid);
 				if (tasks === null) {
 					return new Response('Session not found', { status: 404, headers: corsHeaders });
